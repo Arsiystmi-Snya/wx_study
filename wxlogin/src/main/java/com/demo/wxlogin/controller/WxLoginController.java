@@ -1,9 +1,9 @@
 package com.demo.wxlogin.controller;
 
-import com.demo.wxlogin.config.WxUtils;
+import com.demo.wxlogin.utils.WxUtils;
 import com.google.gson.Gson;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,7 +21,7 @@ import java.util.HashMap;
  * @date: 2021-08-31   09:19
  * @Description:
  */
-@RestController
+@Controller
 @RequestMapping("/wx")
 public class WxLoginController {
 

@@ -1,0 +1,33 @@
+# 服务端口
+server:
+  port: 8088
+
+# 微信开放平台
+wx:
+  pay:
+    # appid
+    app_id:
+    # 商户号
+    partner:
+    # 商户key
+    partnerkey:
+    # 回调地址
+    notifyurl:
+
+
+# freemarker页面静态化
+spring:
+  freemarker:
+    # 静态页面访问路径
+    template-loader-path:
+    # 关闭缓存，及时刷新，生产环境下修改为 true
+    cache: false
+    charset: utf-8
+    check-template-location: true
+    content-type: text/html
+    expose-request-attributes: true
+    expose-session-attributes: true
+    request-context-attribute: request
+    suffix: .ftl
+  mvc:
+    static-path-pattern: /static/**
