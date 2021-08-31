@@ -7,7 +7,7 @@
 *.iml
 out
 gen
-
+.yml
 
 # Compiled class file
 *.class
