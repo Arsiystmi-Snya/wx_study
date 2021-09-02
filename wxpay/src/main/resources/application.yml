@@ -3,23 +3,22 @@ server:
   port: 8088
 
 # 微信开放平台
-wx:
-  pay:
-    # appid
-    app_id:
-    # 商户号
-    partner:
-    # 商户key
-    partnerkey:
-    # 回调地址
-    notifyurl:
+wxPay:
+  # appid
+  appid: wx18a58974bcdaae21
+  # 商户号
+  partner: 1564369251
+  # 商户key
+  partnerkey: TianJinhexingongzhengchu88216470
+  # 回调地址
+  notifyurl: https://pay.weixin.qq.com
 
 
 # freemarker页面静态化
 spring:
   freemarker:
     # 静态页面访问路径
-    template-loader-path:
+    template-loader-path: classpath:/templates/
     # 关闭缓存，及时刷新，生产环境下修改为 true
     cache: false
     charset: utf-8

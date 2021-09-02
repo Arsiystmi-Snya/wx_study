@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Random;
+import java.util.UUID;
 
 /**
  * @Package: com.demo.wxpay.utils
@@ -19,16 +19,16 @@ import java.util.Random;
 @Slf4j
 public class WxPayUtils implements InitializingBean {
 
-    @Value("${wx.pay.app_id}")
+    @Value("${wxPay.appid}")
     private String appId;
 
-    @Value("${wx.pay.partner}")
+    @Value("${wxPay.partner}")
     private String partner;
 
-    @Value("${wx.pay.partnerkey}")
+    @Value("${wxPay.partnerkey}")
     private String partnerKey;
 
-    @Value("${wx.pay.notifyurl}")
+    @Value("${wxPay.notifyurl}")
     private String notifyUrl;
 
     /**
@@ -60,16 +60,24 @@ public class WxPayUtils implements InitializingBean {
      * 生成订单号
      * @return
      */
-    public static String createOrderNo() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String newDate = sdf.format(new Date());
-        Random random = new Random();
-        String result = "";
-        for (int i = 0; i < 3; i++) {
-            result += random.nextInt(10);
+    public static String createorderidByuuid() {
+        // 1.开头两位，标识业务代码或机器代码（可变参数）
+        String machineId = "DD";
+
+        // 2.中间四位整数，标识日期
+        SimpleDateFormat sdf = new SimpleDateFormat("MMdd");
+        String dayTime = sdf.format(new Date());
+        // 3.生成uuid的hashCode值
+        int hashCode = UUID.randomUUID().toString().hashCode();
+        // 4.可能为负数
+        if (hashCode < 0) {
+            hashCode = -hashCode;
         }
-        log.info("=================================" + newDate + result);
-        return newDate + result;
+        // 5.算法处理: 0-代表前面补充0; 10-代表长度为10; d-代表参数为正数型
+        String value = machineId + dayTime + String.format("%010d", hashCode);
+        System.out.println(value);
+
+        return value;
     }
 
     /**

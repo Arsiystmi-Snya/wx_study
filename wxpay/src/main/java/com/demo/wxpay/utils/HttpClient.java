@@ -1,4 +1,4 @@
-package com.demo.wxpay.pojo;
+package com.demo.wxpay.utils;
 
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
