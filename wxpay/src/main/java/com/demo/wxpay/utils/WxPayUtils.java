@@ -65,7 +65,7 @@ public class WxPayUtils implements InitializingBean {
         String machineId = "DD";
 
         // 2.中间四位整数，标识日期
-        SimpleDateFormat sdf = new SimpleDateFormat("MMdd");
+        SimpleDateFormat sdf = new SimpleDateFormat("mmssS");
         String dayTime = sdf.format(new Date());
         // 3.生成uuid的hashCode值
         int hashCode = UUID.randomUUID().toString().hashCode();

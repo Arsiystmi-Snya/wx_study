@@ -11,7 +11,7 @@ wxPay:
   # 商户key
   partnerkey: TianJinhexingongzhengchu88216470
   # 回调地址
-  notifyurl: https://pay.weixin.qq.com
+  notifyurl: http://t77s8b.natappfree.cc/wx/callback/notify
 
 
 # freemarker页面静态化

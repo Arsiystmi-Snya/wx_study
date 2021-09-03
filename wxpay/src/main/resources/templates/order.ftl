@@ -49,7 +49,7 @@
                         totalFee: this.order.totalFee,
                     };
                     // 发送请求
-                    axiox.post("http://localhost:8088/wx/order", params).then(response => {
+                    axiox.post("http://t77s8b.natappfree.cc//wx/pay", params).then(response => {
                         // 成功
                         if (response.data.status == 200) {
                             console.log(response.data.message);

@@ -27,6 +27,6 @@ public class Result implements Serializable {
     /**
      * 状态码
      */
-    private Integer status;
+    private Boolean flag;
 
 }

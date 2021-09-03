@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div>模拟数据</div>
+    <div id="result"></div>
+
+    <script type="text/javascript">
+        var eventSource = new EventSource("/getdata");
+
+        eventSource.onmessage = function (event) {
+            console.info(event.data);
+            document.getElementById("result").innerText = event.data;
+        }
+
+    </script>
+</body>
+</html>
+
+

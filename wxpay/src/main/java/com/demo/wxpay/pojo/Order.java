@@ -17,27 +17,22 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order implements Serializable {
-    private Integer id;
     /**
      * 应用ID
      */
-    private String appid;
+    private String appId;
     /**
      * 商户号
      */
-    private String partner;
+    private String mchId;
     /**
      * 商户key
      */
-    private String partnerkey;
+    private String partnerKey;
     /**
      * 回调地址
      */
-    private String notifyurl;
-    /**
-     * 商品描述
-     */
-    private String description;
+    private String notifyUrl;
     /**
      * 订单号
      */
@@ -57,27 +52,4 @@ public class Order implements Serializable {
         this.outTradeNo = outTradeNo;
         return outTradeNo;
     }
-
-    // TODO
-    // public Integer getAttach() {
-    //     return attach;
-    // }
-    //
-    // public void setAttach() {
-    //     this.attach = 1;
-    // }
-
-    // public void setAttach(Integer attach) {
-    //     this.attach = attach;
-    // }
-    //
-    // public Integer setAttach() {
-    //     attach = String.valueOf(0);
-    //     return Integer.valueOf(attach);
-    // }
-    //
-    // public Integer getAttach() {
-    //     return Integer.valueOf(attach);
-    // }
-
 }
