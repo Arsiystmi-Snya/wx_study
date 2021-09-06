@@ -18,6 +18,9 @@ public class MyConfig implements WebMvcConfigurer {
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/order.ftl").setViewName("order");
+        // 通过 order.html 访问，仍然跳转至 order.html 界面
+        // 注意SetViewName方法就是访问的动态界面名，所以不添加后缀
+        registry.addViewController("/order.html").setViewName("order");
+        registry.addViewController("/pay.html").setViewName("pay.html");
     }
 }

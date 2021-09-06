@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -34,6 +35,7 @@ import java.util.Map;
 @Slf4j
 public class WxPayController {
     private Map<String, SseEmitter> sseEmitters = new HashMap<>();
+    String url = null;
 
     @Autowired
     WxPayService wxPayService;
@@ -43,18 +45,22 @@ public class WxPayController {
      * @param order
      * @return
      */
-    @PostMapping("/pay")
+    @PostMapping("/paytest")
     @ResponseBody
-    public Result createPayQrCode(Order order) {
+    public Result createPayQrCode(@RequestBody Order order, HttpServletRequest request) {
         order.setOutTradeNo(WxPayUtils.createorderidByuuid());
 
         try {
-            String callBcakUrl = wxPayService.createPayQrCode(order);
-
-            return new Result(callBcakUrl, "生成订单成功", true);
+            String callBackUrl = wxPayService.createPayQrCode(order);
+            if (callBackUrl == null) {
+                return new Result(null, "生成订单失败", false);
+            } else {
+                url = callBackUrl;
+                return new Result(callBackUrl, "生成订单成功", true);
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result(null, "生成订单失败", false);
+            return new Result(null, "订单内部失败", false);
         }
     }
 
@@ -63,89 +69,13 @@ public class WxPayController {
      * @return
      * @throws Exception
      */
-    @RequestMapping("/pays")
-    public String createPayQRcode(HttpServletRequest request) throws Exception {
-        // 价格，应该从数据库中获取
-        Integer totalFee = 1;
-
-        // 订单号
-        String outTradeNo = WxPayUtils.createorderidByuuid();
-
-        Map<String, String> map = wxPayService.createPayQRcode(totalFee, outTradeNo);
-
-        request.setAttribute("map", map);
-
-        Object map1 = request.getAttribute("map");
+    @GetMapping("/pays")
+    public String createPayQRcode(Model model) {
+        // 从数据库获取url
+        log.info("===二维码地址===========\n");
+        System.out.println(url);
+        model.addAttribute("url", url);
         return "pay";
-    }
-
-    /**
-     * 判断支付是否完成
-     * @param outTradeNo
-     * @return
-     * @throws Exception
-     */
-    @GetMapping("/queryOrder/{no}")
-    public String queryPayStatus(@PathVariable("no") String outTradeNo) throws Exception {
-        // TODO 异步通知商户支付结果，告知支付情况
-        Map<String, String> map = wxPayService.queryOrderStatus(outTradeNo);
-
-        // 判断支付是否成功
-        if (map.get("trade_state").equals("SUCCESS")) {
-            // 进行改变数据库中的操作
-            return "success";
-        }
-        return "false";
-    }
-
-    @GetMapping("/test")
-    public String demoTest(Model model) {
-        model.addAttribute("flag", true);
-        return "success";
-    }
-
-    /*
-        SSE 必须返回SseEmitter对象，必须必须返回SseEmitter对象，SseEmitter对象是Session级别的，
-        如果你要点对点针对每个session要独立存储。如果你是广播可以公用一个SseEmitter对象。
-        按照SSE规范也必须声明produces为"text/event-stream"。当你调用该接口的时候将建立起SSE连接。
-        你可以在另一个线程中调用SseEmitter的send方法向客户端发送事件。你也可以在发送事件后调用complete方法来关闭SSE连接
-     */
-
-    /**
-     * SSE
-     * @param id
-     * @return sseEmitter
-     * 访问此连接，来完成单向通讯
-     */
-    @GetMapping(path = "/send/{id}", produces = "text/event-stream")
-    public SseEmitter sendMessage(@PathVariable("id") String id) {
-        SseEmitter sseEmitter = new SseEmitter();
-        this.sseEmitters.put(id, sseEmitter);
-        return sseEmitter;
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/getdata", produces = "text/event-stream;charset=UTF-8")
-    public String push() {
-        try {
-            Thread.sleep(1000);
-            // 第三方数据源调用
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        double random = Math.random();
-
-        return String.valueOf(random);
-    }
-
-    @GetMapping("/success")
-    public String success() {
-        return "success";
-    }
-
-    @RequestMapping("/index")
-    public String index() {
-        return "index";
     }
 
     /**
@@ -174,7 +104,8 @@ public class WxPayController {
         // todo 获取微信的回调xml
 
         // 秘钥验签：验证签名是否正确
-        if (WXPayUtil.isSignatureValid(notifyXml, WxPayUtils.wx_pay_partnerKey)) {
+        // 秘钥从数据库中查找
+        if (WXPayUtil.isSignatureValid(notifyXml, "TianJinhexingongzhengchu88216470")) {
 
             // 解析返回结果
             Map<String, String> notifyMap = WXPayUtil.xmlToMap(notifyXml);
@@ -195,10 +126,11 @@ public class WxPayController {
                 // 创建响应对象
                 Map<String, String> returnMap = new HashMap<>();
                 returnMap.put("return_code", "SUCCESS");
-                returnMap.put("return_msg", "OK");
+                returnMap.put("return_msg", "我已经收到支付结果信息");
                 String returnXml = WXPayUtil.mapToXml(returnMap);
                 response.setContentType("text/xml");
-                log.info("支付成功，通知已处理");
+                log.info("\n 支付成功，通知已处理");
+                System.out.println(returnXml);
                 return returnXml;
             }
         }
@@ -209,7 +141,70 @@ public class WxPayController {
         returnMap.put("return_msg", "");
         String returnXml = WXPayUtil.mapToXml(returnMap);
         response.setContentType("text/xml");
-        log.info("校验失败");
+        log.info("\n 校验失败");
+        System.out.println(returnXml);
         return returnXml;
+    }
+
+    /**
+     * 查询订单
+     * @param outTradeNo
+     * @return
+     * @throws Exception
+     */
+    @GetMapping("/queryOrder/{no}")
+    public String queryPayStatus(@PathVariable("no") String outTradeNo) throws Exception {
+        // TODO 异步通知商户支付结果，告知支付情况
+        Map<String, String> map = wxPayService.queryOrderStatus(outTradeNo);
+
+        // 判断支付是否成功
+        if (map.get("trade_state").equals("SUCCESS")) {
+            // 进行改变数据库中的操作
+            return "success";
+        }
+        return "false";
+    }
+
+    /*
+        SSE 必须返回SseEmitter对象，必须必须返回SseEmitter对象，SseEmitter对象是Session级别的，
+        如果你要点对点针对每个session要独立存储。如果你是广播可以公用一个SseEmitter对象。
+        按照SSE规范也必须声明produces为"text/event-stream"。当你调用该接口的时候将建立起SSE连接。
+        你可以在另一个线程中调用SseEmitter的send方法向客户端发送事件。你也可以在发送事件后调用complete方法来关闭SSE连接
+     */
+
+    /**
+     * SSE
+     * @param id
+     * @return sseEmitter
+     * 访问此连接，来完成单向通讯
+     */
+    @GetMapping(path = "/send/{id}", produces = "text/event-stream")
+    public SseEmitter sendMessage(@PathVariable("id") String id) {
+        SseEmitter sseEmitter = new SseEmitter();
+        this.sseEmitters.put(id, sseEmitter);
+        return sseEmitter;
+    }
+
+    /**
+     * SSE
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getdata", produces = "text/event-stream;charset=UTF-8")
+    public String push() {
+        try {
+            Thread.sleep(1000);
+            // 第三方数据源调用
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        double random = Math.random();
+
+        return String.valueOf(random);
+    }
+
+    @GetMapping("/success")
+    public String success() {
+        return "success";
     }
 }

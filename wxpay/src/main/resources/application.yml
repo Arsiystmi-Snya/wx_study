@@ -5,13 +5,13 @@ server:
 # 微信开放平台
 wxPay:
   # appid
-  appid: wx18a58974bcdaae21
+#  appid: wx18a58974bcdaae21
   # 商户号
-  partner: 1564369251
+#  partner: 1564369251
   # 商户key
-  partnerkey: TianJinhexingongzhengchu88216470
+#  partnerkey: TianJinhexingongzhengchu88216470
   # 回调地址
-  notifyurl: http://t77s8b.natappfree.cc/wx/callback/notify
+#  notifyurl: http://9x4ch3.natappfree.cc/wx/callback/notify
 
 
 # freemarker页面静态化
@@ -27,6 +27,9 @@ spring:
     expose-request-attributes: true
     expose-session-attributes: true
     request-context-attribute: request
-    suffix: .ftl
+    # 模板文件后缀，默认是.html
+    suffix: .html
+  resources:
+    static-locations: classpath:/META-INF/resources/, classpath:/resources/, classpath:/static/, classpath:/public/, classpath:/templates/
   mvc:
     static-path-pattern: /static/**

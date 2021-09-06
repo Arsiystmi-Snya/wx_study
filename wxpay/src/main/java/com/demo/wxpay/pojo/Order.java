@@ -1,6 +1,5 @@
 package com.demo.wxpay.pojo;
 
-import com.demo.wxpay.utils.WxPayUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,15 +19,15 @@ public class Order implements Serializable {
     /**
      * 应用ID
      */
-    private String appId;
+    private String appid;
     /**
      * 商户号
      */
-    private String mchId;
+    private String partener;
     /**
      * 商户key
      */
-    private String partnerKey;
+    private String partenerkey;
     /**
      * 回调地址
      */
@@ -47,9 +46,15 @@ public class Order implements Serializable {
      */
     private Integer attach;
 
-    public String setOutTradeNo(String outTradeNo) {
-        outTradeNo = WxPayUtils.createorderidByuuid();
-        this.outTradeNo = outTradeNo;
-        return outTradeNo;
+
+    public Order(String appid, String partener, String partenerkey) {
+        this.appid = appid;
+        this.partener = partener;
+        this.partenerkey = partenerkey;
     }
+    // public String setOutTradeNo(String outTradeNo) {
+    //     outTradeNo = WxPayUtils.createorderidByuuid();
+    //     this.outTradeNo = outTradeNo;
+    //     return outTradeNo;
+    // }
 }

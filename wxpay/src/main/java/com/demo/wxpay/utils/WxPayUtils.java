@@ -2,7 +2,6 @@ package com.demo.wxpay.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
@@ -19,16 +18,16 @@ import java.util.UUID;
 @Slf4j
 public class WxPayUtils implements InitializingBean {
 
-    @Value("${wxPay.appid}")
+    // @Value("${wxPay.appid}")
     private String appId;
 
-    @Value("${wxPay.partner}")
+    // @Value("${wxPay.partner}")
     private String partner;
 
-    @Value("${wxPay.partnerkey}")
+    // @Value("${wxPay.partnerkey}")
     private String partnerKey;
 
-    @Value("${wxPay.notifyurl}")
+    // @Value("${wxPay.notifyurl}")
     private String notifyUrl;
 
     /**
@@ -75,7 +74,7 @@ public class WxPayUtils implements InitializingBean {
         }
         // 5.算法处理: 0-代表前面补充0; 10-代表长度为10; d-代表参数为正数型
         String value = machineId + dayTime + String.format("%010d", hashCode);
-        System.out.println(value);
+        System.out.println("OutTradeNo: " + value);
 
         return value;
     }

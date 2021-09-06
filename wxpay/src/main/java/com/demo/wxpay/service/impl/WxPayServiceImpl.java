@@ -87,7 +87,7 @@ public class WxPayServiceImpl implements WxPayService {
     }
 
     /**
-     * 判断是否完成支付
+     * 查询订单
      * @param outTradeNo
      * @return
      */
@@ -126,8 +126,8 @@ public class WxPayServiceImpl implements WxPayService {
     @Override
     public String createPayQrCode(Order order) {
         HashMap<String, String> urlParams = new HashMap<>();
-        urlParams.put("appid", order.getAppId());
-        urlParams.put("mch_id", order.getMchId());
+        urlParams.put("appid", order.getAppid());
+        urlParams.put("mch_id", order.getPartener());
         // 随机字符串
         urlParams.put("nonce_str", WXPayUtil.generateNonceStr());
         urlParams.put("body", "微信扫码支付demo");
@@ -143,7 +143,7 @@ public class WxPayServiceImpl implements WxPayService {
             // 发送请求，传递xml参数，微信支付提供的固定地址
             HttpClient client = new HttpClient("https://api.mch.weixin.qq.com/pay/unifiedorder");
             // xml参数加密时，将sign签名注入
-            client.setXmlParam(WXPayUtil.generateSignedXml(urlParams, order.getPartnerKey()));
+            client.setXmlParam(WXPayUtil.generateSignedXml(urlParams, order.getPartenerkey()));
             client.setHttps(true);
             client.post();
             // 使用xml返回结果
@@ -164,6 +164,8 @@ public class WxPayServiceImpl implements WxPayService {
 
             log.info("=======================返回数据解析===================");
             System.out.println(map);
+            String code_url = resultMap.get("code_url");
+            return code_url;
         } catch (Exception e) {
             e.printStackTrace();
         }

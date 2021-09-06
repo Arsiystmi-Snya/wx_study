@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <script src="../static/js/axios-0.18.0.js"></script>
+    <script src="../static/js/jquery-2.1.0.min.js"></script>
+</head>
+<body>
+    <h2>首页</h2>
+
+    <div>
+        <button id="pay" onclick="wxPay()">支付</button>
+    </div>
+    <!--<br>-->
+    <!--<div>-->
+    <!--    <button id="xxx" onclick="wxUrl()">二维码</button>-->
+    <!--</div>-->
+
+
+    <script>
+        function wxPay() {
+            window.location.href = "/order.html";
+        }
+
+        // function wxUrl() {
+        //     axios.get("wx/pays").then(response => {
+        //     })
+        // }
+    </script>
+</body>
+</html>

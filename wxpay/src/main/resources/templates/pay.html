@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>微信扫码支付demo</title>
+    <script src="../static/js/axios-0.18.0.js"></script>
+    <script src="../static/js/jquery-2.1.0.min.js"></script>
+    <script src="../static/js/qrcode.min.js"></script>
+    <script src="../static/js/vuejs-2.5.16.js"></script>
+</head>
+<body>
+    <div id="app">
+        <center>
+            <div id="container"></div>
+        </center>
+    </div>
+
+    <#--设置要生成二维码的链接-->
+    <script>
+        new QRCode(document.getElementById("container"), "${url}");
+    </script>
+
+    <!--<script>-->
+    <!--    axios.get(" http://ftr2dn.natappfree.cc/wx/callback/notify").then(response => {-->
+    <!--    })-->
+    <!--</script>-->
+
+</body>
+</html>
