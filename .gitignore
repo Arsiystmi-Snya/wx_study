@@ -7,8 +7,6 @@
 *.iml
 out
 gen
-demo.java
-pay.ftl
 
 # Compiled class file
 *.class
@@ -31,3 +29,5 @@ HELP.md
 *.iml
 .idea/
 
+/wxpay/src/main/resources/templates/pay.ftl
+/wxpay/src/test/java/demo.java
