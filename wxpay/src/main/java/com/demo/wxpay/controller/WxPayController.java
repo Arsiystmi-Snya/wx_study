@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -97,8 +98,6 @@ public class WxPayController {
         // sb为微信返回的xml
         String notifyXml = sb.toString();
 
-        // ServletInputStream inputStream = request.getInputStream();
-        // String notifyXml = StreamUtils.inputStream2String(inputStream, "utf-8");
         log.info("\n notifyXml = \n " + notifyXml);
 
         // todo 获取微信的回调xml
@@ -124,26 +123,29 @@ public class WxPayController {
 
                 // 支付成功：给微信发送我已接收通知的响应
                 // 创建响应对象
-                Map<String, String> returnMap = new HashMap<>();
-                returnMap.put("return_code", "SUCCESS");
-                returnMap.put("return_msg", "我已经收到支付结果信息");
-                String returnXml = WXPayUtil.mapToXml(returnMap);
+                String xml = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[我已收到支付结果信息]]></return_msg></xml>";
+
+                response.setCharacterEncoding("UTF-8");
                 response.setContentType("text/xml");
+                PrintWriter out = response.getWriter();
+                out.print(xml);
+                out.close();
                 log.info("\n 支付成功，通知已处理");
-                System.out.println(returnXml);
-                return returnXml;
+                System.out.println(xml);
+                return xml;
             }
         }
 
         // 创建响应对象：微信接收到校验失败的结果后，会反复的调用当前回调函数
-        Map<String, String> returnMap = new HashMap<>();
-        returnMap.put("return_code", "FAIL");
-        returnMap.put("return_msg", "");
-        String returnXml = WXPayUtil.mapToXml(returnMap);
+        String xml = "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[支付失败]]></return_msg></xml>";
+        response.setCharacterEncoding("UTF-8");
         response.setContentType("text/xml");
-        log.info("\n 校验失败");
-        System.out.println(returnXml);
-        return returnXml;
+        PrintWriter out = response.getWriter();
+        out.print(xml);
+        out.close();
+        log.info("\n 支付失败");
+        System.out.println(xml);
+        return xml;
     }
 
     /**

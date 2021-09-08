@@ -5,13 +5,13 @@ server:
 # 微信开放平台
 wxPay:
   # appid
-#  appid: wx18a58974bcdaae21
+#  appid: wx8397f8696b538317
   # 商户号
-#  partner: 1564369251
+#  partner: 1473426802
   # 商户key
-#  partnerkey: TianJinhexingongzhengchu88216470
+#  partnerkey: T6m9iK73b0kn9g5v426MKfHQH7X8rKwb
   # 回调地址
-#  notifyurl: http://9x4ch3.natappfree.cc/wx/callback/notify
+#  notifyurl: http://vy4tcv.natappfree.cc/wx/callback/notify
 
 
 # freemarker页面静态化
