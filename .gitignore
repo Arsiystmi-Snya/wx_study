@@ -8,7 +8,6 @@
 out
 gen
 
-
 # Compiled class file
 *.class
 target/
@@ -30,3 +29,5 @@ HELP.md
 *.iml
 .idea/
 
+/wxpay/src/main/resources/templates/pay.ftl
+/wxpay/src/test/java/demo.java
